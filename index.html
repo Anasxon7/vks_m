@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VksGo Monitoring Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:#f8f9fa;color:#212529;line-height:1.5}.header{background:#fff;border-bottom:1px solid #e9ecef;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.header-left,.header-right{display:flex;align-items:center;gap:12px}.logo{width:32px;height:32px;background:linear-gradient(135deg,#4285f4,#34a853,#fbbc04,#ea4335);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px}.header-title{font-size:18px;font-weight:500;color:#202124}.header-right{gap:16px}.theme-toggle{width:32px;height:32px;border:none;background:0 0;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center}.theme-toggle:hover{background:#f8f9fa}.dashboard{max-width:1400px;margin:0 auto;padding:24px}.page-header{margin-bottom:24px;display:flex;justify-content:space-between;align-items:center}.header-text{max-width:80%}.page-title{margin:0;font-size:24px;font-weight:700}.page-subtitle{margin:5px 0 0;color:#555;font-size:16px}.date-range{display:flex;gap:12px;align-items:center}.date-range input[type=text]{padding:6px 10px;border-radius:6px;border:1px solid #ccc;font-size:15px;width:140px}.row{display:grid;gap:24px;margin-bottom:24px}.summary-cards{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.card{background:#fff;border-radius:12px;padding:1rem 1.5rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);display:flex;flex-direction:column;gap:.75rem;transition:box-shadow .2s ease}.card:hover{box-shadow:0 1px 6px rgba(32,33,36,.28)}.card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:16px}.card-icon{font-size:1.8rem;line-height:1}.card-title{font-weight:600;font-size:1.1rem;margin:0;color:#5f6368}.card-value{font-size:2.2rem;font-weight:700;color:#222;margin:0 0 12px}.card-stats.grid-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem}.stat-item{display:flex;justify-content:space-between;font-weight:500;font-size:.9rem;color:#555}.stat-value{font-weight:700;color:#111}.chart-container{background:#fff;border-radius:12px;border:1px solid #e8eaed;padding:20px 30px;box-shadow:0 4px 12px rgba(0,0,0,0.08);margin-top:30px}.two-column{grid-template-columns:1fr 1fr}.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e8eaed}.chart-title{font-size:20px;font-weight:700}.filters{display:flex;gap:12px}.filter-select{padding:8px 12px;border:1px solid #dadce0;border-radius:4px;background:#fff;font-size:13px;color:#202124;cursor:pointer}.filter-select:focus{outline:none;border-color:#4285f4;box-shadow:0 1px 6px rgba(32,33,36,.28)}.chart-canvas{height:300px;position:relative}.chart-small{height:200px}.resource-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:16px}.gauge-container{text-align:center;padding:16px;border:1px solid #e8eaed;border-radius:8px;background:#fafbfc}.gauge-title{font-size:14px;color:#5f6368;margin-bottom:16px}.gauge-value{font-size:24px;font-weight:400;color:#202124;margin-bottom:8px}.gauge-bar{width:100%;height:8px;background:#e8eaed;border-radius:4px;overflow:hidden;margin-bottom:8px}.gauge-fill{height:100%;background:linear-gradient(90deg,#34a853,#fbbc04,#ea4335);border-radius:4px;transition:width .3s ease}.usage-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}.usage-card{text-align:center;padding:20px;border:1px solid #e8eaed;border-radius:8px;background:linear-gradient(135deg,#f8f9fa,#fff)}.usage-value{font-size:24px;font-weight:400;color:#1a73e8;margin-bottom:8px}.usage-label{font-size:13px;color:#5f6368}.table{width:100%;border-collapse:collapse;margin-top:16px}.table th{background:#f8f9fa;color:#5f6368;padding:12px 16px;text-align:left;font-weight:500;font-size:13px;border-bottom:1px solid #e8eaed}.table td{padding:12px 16px;border-bottom:1px solid #e8eaed;font-size:13px}.table tr:hover{background:#f8f9fa}.status-badge{padding:4px 12px;border-radius:12px;font-size:12px;font-weight:500}.status-active{background:#e8f5e8;color:#137333}.status-resolved{background:#137333;color:#fff}.status-ongoing{background:#c2a29f;color:#d93025}.org-avatar{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-right:12px;font-size:12px;font-weight:500;color:#fff}.org-name{display:flex;align-items:center}.search-container{display:flex;align-items:center;gap:10px}.search-container input[type=text]{padding:8px 12px;font-size:14px;border:1px solid #ccc;border-radius:8px;width:200px}.search-container button{padding:8px 14px;font-size:14px;background-color:#4285f4;color:#fff;border:none;border-radius:8px;cursor:pointer}.pagination{display:flex;justify-content:flex-end;margin-top:20px;gap:8px}.pagination button{padding:6px 12px;border:1px solid #ccc;border-radius:6px;background-color:#fff;cursor:pointer}.pagination button.active{background-color:#4285f4;color:#fff;border-color:#4285f4}@media (max-width:1200px){.summary-cards{grid-template-columns:repeat(2,1fr)}}@media (max-width:768px){.summary-cards,.two-column,.resource-metrics,.usage-cards{grid-template-columns:1fr}.filters{flex-direction:column}.dashboard{padding:16px}}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <img src="/logo.jpg" class="logo" alt="">
+            <div class="header-title">VksGo Monitoring</div>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle" aria-label="Toggle theme">☀️</button>
+            <span style="color:#5f6368;font-size:13px">EN</span>
+            <div style="width:32px;height:32px;background:#ea4335;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:500">A</div>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="page-header">
+            <div class="header-text">
+                <h1 class="page-title">System Monitoring</h1>
+            </div>
+            <div class="date-range">
+                <input type="text" id="fromDate" placeholder="From Date" readonly>
+                <input type="text" id="toDate" placeholder="To Date" readonly>
+            </div>
+        </div>
+
+        <div class="row summary-cards">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📅</div>
+                    <div class="card-title">Total Meetings Today</div>
+                </div>
+                <div class="card-value">142</div>
+                <div class="card-stats grid-stats">
+                    <div class="stat-item">
+                        <span>Active</span>
+                        <span class="stat-value">23</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Completed</span>
+                        <span class="stat-value">119</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">👥</div>
+                    <div class="card-title">Total Participants</div>
+                </div>
+                <div class="card-value">487</div>
+                <div class="card-stats grid-stats">
+                    <div class="stat-item">
+                        <span>Avg/Meeting</span>
+                        <span class="stat-value">3.4</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Max in One</span>
+                        <span class="stat-value">15</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-title">Peak Hour</div>
+                </div>
+                <div class="card-value">14:00–15:00</div>
+                <div class="card-stats grid-stats">
+                    <div class="stat-item">
+                        <span>Participants</span>
+                        <span class="stat-value">89</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Sessions</span>
+                        <span class="stat-value">26</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">❌</div>
+                    <div class="card-title">Failed Sessions</div>
+                </div>
+                <div class="card-value">7</div>
+                <div class="card-stats grid-stats">
+                    <div class="stat-item">
+                        <span>Connection Errors</span>
+                        <span class="stat-value">4</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>User Canceled</span>
+                        <span class="stat-value">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">📊 Meeting Duration Trend</div>
+                    <div class="filters">
+                        <select class="filter-select">
+                            <option>All Types</option>
+                            <option>Team Meetings</option>
+                            <option>Users dialogue Calls</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-canvas">
+                    <canvas id="durationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row two-column">
+            <div class="card">
+                <div class="chart-header">
+                    <div class="chart-title">📱 Device Distribution</div>
+                </div>
+                <div class="chart-canvas chart-small">
+                    <canvas id="deviceChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="chart-header">
+                    <div class="chart-title">🌐 Network Latency</div>
+                </div>
+                <div class="chart-canvas chart-small">
+                    <canvas id="latencyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">⚙️ System Resource Monitoring</div>
+                </div>
+                <div class="resource-metrics">
+                    <div class="gauge-container">
+                        <div class="gauge-title">CPU Usage</div>
+                        <div class="gauge-value">68%</div>
+                        <div class="gauge-bar">
+                            <div class="gauge-fill" style="width:68%"></div>
+                        </div>
+                        <div style="font-size:12px;color:#5f6368">8 cores active</div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="gauge-title">Memory Usage</div>
+                        <div class="gauge-value">5.2GB</div>
+                        <div class="gauge-bar">
+                            <div class="gauge-fill" style="width:65%"></div>
+                        </div>
+                        <div style="font-size:12px;color:#5f6368">of 8GB total</div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="gauge-title">Network I/O</div>
+                        <div class="gauge-value">124MB/s</div>
+                        <div class="gauge-bar">
+                            <div class="gauge-fill" style="width:45%"></div>
+                        </div>
+                        <div style="font-size:12px;color:#5f6368">bandwidth usage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">🔧 Average Resource Usage per Meeting</div>
+                </div>
+                <div class="usage-cards">
+                    <div class="usage-card">
+                        <div class="usage-value">~4.8%</div>
+                        <div class="usage-label">CPU per Meeting</div>
+                    </div>
+                    <div class="usage-card">
+                        <div class="usage-value">~156MB</div>
+                        <div class="usage-label">RAM per Meeting</div>
+                    </div>
+                    <div class="usage-card">
+                        <div class="usage-value">~22MB</div>
+                        <div class="usage-label">Data Transfer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">🏢 Statistics by Organization</div>
+                    <div class="search-container">
+                        <input type="text" placeholder="Search by Org name">
+                        <button>Search</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Organization</th>
+                            <th>Meetings</th>
+                            <th>Participants</th>
+                            <th>Avg Duration</th>
+                            <th>Storage Used</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="org-name">
+                                    <div class="org-avatar" style="background:#4285f4">CS</div>
+                                    Cyber Security Center
+                                </div>
+                            </td>
+                            <td>18</td>
+                            <td>67</td>
+                            <td>42 min</td>
+                            <td>11.39 KB / 100 GB</td>
+                            <td><span class="status-badge status-resolved">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <div class="org-name">
+                                    <div class="org-avatar" style="background:#ea4335">ON</div>
+                                    One-Net
+                                </div>
+                            </td>
+                            <td>25</td>
+                            <td>89</td>
+                            <td>35 min</td>
+                            <td>50.31 KB / 10 GB</td>
+                            <td><span class="status-badge status-resolved">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                <div class="org-name">
+                                    <div class="org-avatar" style="background:#34a853">BF</div>
+                                    BFF
+                                </div>
+                            </td>
+                            <td>32</td>
+                            <td>124</td>
+                            <td>48 min</td>
+                            <td>291.74 MB / 100 GB</td>
+                            <td><span class="status-badge status-ongoing">Inactive</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>
+                                <div class="org-name">
+                                    <div class="org-avatar" style="background:#fbbc04">DG</div>
+                                    Datagaze
+                                </div>
+                            </td>
+                            <td>29</td>
+                            <td>95</td>
+                            <td>38 min</td>
+                            <td>4.64 MB / 100 GB</td>
+                            <td><span class="status-badge status-resolved">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>
+                                <div class="org-name">
+                                    <div class="org-avatar" style="background:#9aa0a6">MV</div>
+                                    MVD
+                                </div>
+                            </td>
+                            <td>14</td>
+                            <td>43</td>
+                            <td>31 min</td>
+                            <td>518.97 KB / 50 GB</td>
+                            <td><span class="status-badge status-resolved">Active</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button>&laquo;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>&raquo;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">🚨 Recent System Events</div>
+                    <div class="filters">
+                        <select class="filter-select">
+                            <option>All Events</option>
+                            <option>Errors Only</option>
+                            <option>Warnings</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Timestamp</th>
+                            <th>Event Type</th>
+                            <th>Session ID</th>
+                            <th>Server Node</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>29 May 2025 14:32</td>
+                            <td>Connection Timeout</td>
+                            <td>sess_9247</td>
+                            <td>node-03</td>
+                            <td><span class="status-badge status-active">Resolved</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>29 May 2025 13:45</td>
+                            <td>Audio Codec Error</td>
+                            <td>sess_9203</td>
+                            <td>node-01</td>
+                            <td><span class="status-badge status-active">Resolved</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>29 May 2025 12:18</td>
+                            <td>High Memory Usage</td>
+                            <td>sess_9156</td>
+                            <td>node-02</td>
+                            <td><span class="status-badge status-resolved">Monitoring</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>29 May 2025 11:55</td>
+                            <td>Network Latency</td>
+                            <td>sess_9134</td>
+                            <td>node-04</td>
+                            <td><span class="status-badge status-active">Resolved</span></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>29 May 2025 10:22</td>
+                            <td>User Disconnected</td>
+                            <td>sess_9087</td>
+                            <td>node-01</td>
+                            <td><span class="status-badge status-active">Resolved</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button>&laquo;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>&raquo;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Date pickers
+            const fromInput = document.getElementById('fromDate');
+            const toInput = document.getElementById('toDate');
+            
+            const fpFrom = flatpickr(fromInput, {
+                dateFormat: "d.m.Y",
+                maxDate: new Date(),
+                onChange: (selectedDates) => {
+                    if (selectedDates.length) {
+                        if (toInput._flatpickr.selectedDates[0] && toInput._flatpickr.selectedDates[0] < selectedDates[0]) {
+                            toInput._flatpickr.setDate(selectedDates[0], false);
+                        }
+                        toInput._flatpickr.set('minDate', selectedDates[0]);
+                    }
+                }
+            });
+
+            const fpTo = flatpickr(toInput, {
+                dateFormat: "d.m.Y",
+                maxDate: new Date(),
+                onChange: (selectedDates) => {
+                    if (selectedDates.length) {
+                        if (fromInput._flatpickr.selectedDates[0] && fromInput._flatpickr.selectedDates[0] > selectedDates[0]) {
+                            fromInput._flatpickr.setDate(selectedDates[0], false);
+                        }
+                        fromInput._flatpickr.set('maxDate', selectedDates[0]);
+                    }
+                }
+            });
+
+            // Charts
+            const durationCtx = document.getElementById('durationChart').getContext('2d');
+            new Chart(durationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['December', 'January', 'February', 'March', 'April', 'May'],
+                    datasets: [{
+                        label: 'Average Duration (minutes)',
+                        data: [32, 35, 38, 42, 45, 41],
+                        borderColor: '#4285f4',
+                        backgroundColor: 'rgba(66, 133, 244, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#e8eaed' } },
+                        x: { grid: { color: '#e8eaed' } }
+                    }
+                }
+            });
+
+            const deviceCtx = document.getElementById('deviceChart').getContext('2d');
+            new Chart(deviceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Web Platform', 'Desktop', 'Mobile', 'Tablet'],
+                    datasets: [{
+                        data: [65, 45, 40, 15],
+                        backgroundColor: ['#ea4335', '#4285f4', '#34a853', '#fbbc04'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+            new Chart(latencyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Web Platform', 'Desktop', 'Mobile', 'Tablet'],
+                    datasets: [
+                        {
+                            label: 'Average Latency (ms)',
+                            data: [80, 45, 62, 38],
+                            backgroundColor: '#4285f4'
+                        },
+                        {
+                            label: 'Peak Latency (ms)',
+                            data: [150, 120, 145, 95],
+                            backgroundColor: '#ea4335'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#e8eaed' } },
+                        x: { grid: { color: '#e8eaed' } }
+                    }
+                }
+            });
+
+            // Simulate real-time updates
+            setInterval(() => {
+                const cards = document.querySelectorAll('.card-value');
+                cards.forEach((card, index) => {
+                    if (Math.random() > 0.9) {
+                        const current = parseInt(card.textContent);
+                        if (index === 0) card.textContent = current + Math.floor(Math.random() * 2);
+                        else if (index === 1) card.textContent = current + Math.floor(Math.random() * 5);
+                    }
+                });
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
